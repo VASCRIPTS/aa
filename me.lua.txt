@@ -1,161 +1,127 @@
--- Lade die Rayfield-Bibliothek
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
--- Erstelle das Hauptfenster mit erweiterten Optionen
+-- Window Konfiguration mit Custom Theme
 local Window = Rayfield:CreateWindow({
-    Name = "Ultimate Script Hub",
-    LoadingTitle = "Loading Advanced Interface",
-    LoadingSubtitle = "Please wait, initializing features...",
+    Name = "Premium Script v1.0",
+    LoadingTitle = "Loading Interface...",
+    LoadingSubtitle = "by YourName",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "AdvancedGUI", -- Speicherort für Einstellungen
-        FileName = "ScriptHubConfig"
+        FolderName = "ScriptSettings",
+        FileName = "ConfigFile"
+    },
+    KeySystem = true,
+    KeySettings = {
+        Title = "Key System",
+        Subtitle = "Enter Key to Access",
+        Note = "Join Discord for key",
+        Key = "PREMIUM-KEY-123"
     },
     Discord = {
         Enabled = true,
-        Invite = "your-invite-code", -- Füge hier eine Discord-Einladung ein
+        Invite = "discord.gg/YourServer",
         RememberJoins = true
-    },
-    Theme = "Ocean", -- Standard-Theme
-    KeySystem = false, -- Aktiviere den Key-System-Schutz
-    KeySettings = {
-        Title = "Access Key Required",
-        Subtitle = "Please enter your key to proceed.",
-        Note = "If you don't have a key, contact support.",
-        Key = "123" -- Ersetze mit deinem Schlüssel
     }
 })
 
--- **Tab 1: Hauptfunktionen**
-local MainTab = Window:CreateTab("Script Hub", 4483362458)
-
--- **Script-Button: Führt dein Script aus**
-MainTab:CreateButton({
-    Name = "Execute Cheese Script",
-    Callback = function()
-        local success, errorMessage = pcall(function()
-            game:GetService("ReplicatedStorage").AddCheese:FireServer()
-        end)
-
-        if success then
-            Rayfield:Notify({
-                Title = "Script Execution",
-                Content = "Cheese Script executed successfully!",
-                Duration = 5,
-                Actions = {
-                    Close = { Name = "OK", Callback = function() end }
-                }
-            })
-        else
-            Rayfield:Notify({
-                Title = "Execution Error",
-                Content = "Failed to execute Cheese Script: " .. errorMessage,
-                Duration = 5,
-                Actions = {
-                    Close = { Name = "OK", Callback = function() end }
-                }
-            })
-        end
-    end,
+-- Custom Theme
+Rayfield:LoadConfiguration({
+    Theme = {
+        Main = Color3.fromRGB(35, 35, 35),
+        Second = Color3.fromRGB(25, 25, 25),
+        Stroke = Color3.fromRGB(50, 50, 50),
+        Accent = Color3.fromRGB(0, 170, 255),
+        TextColor = Color3.fromRGB(255, 255, 255)
+    }
 })
 
--- **Slider zur Lautstärkeanpassung**
-MainTab:CreateSlider({
-    Name = "Adjust Volume",
-    Range = {0, 100},
-    Increment = 1,
-    Suffix = "%",
-    CurrentValue = 50,
-    Callback = function(Value)
-        print("Volume set to:", Value)
-    end,
-})
+-- Tabs erstellen
+local MainTab = Window:CreateTab("Main", 4483362458)
+local SettingsTab = Window:CreateTab("Settings", 4483362458)
+local CreditsTab = Window:CreateTab("Credits", 4483362458)
 
--- **Farbwähler mit Akzentänderung**
-MainTab:CreateColorPicker({
-    Name = "Change Accent Color",
-    Color = Color3.fromRGB(0, 255, 255), -- Standardfarbe
-    Callback = function(Color)
-        Window:ModifyTheme({ Accent = Color })
-        Rayfield:Notify({
-            Title = "Theme Update",
-            Content = "Accent color updated!",
-            Duration = 3
-        })
-    end,
-})
-
--- **Dropdown für Modi**
-MainTab:CreateDropdown({
-    Name = "Select Mode",
-    Options = {"Stealth", "Combat", "Explorer"},
-    CurrentOption = "Stealth",
-    Callback = function(Option)
-        print("Mode selected:", Option)
-    end,
-})
-
--- **Toggle zur Aktivierung von Features**
-MainTab:CreateToggle({
-    Name = "Activate Stealth Mode",
+-- Main Tab Elemente
+local ToggleButton = MainTab:CreateToggle({
+    Name = "Auto Farm",
     CurrentValue = false,
-    Callback = function(State)
-        print("Stealth Mode Active:", State)
+    Flag = "AutoFarmToggle",
+    Callback = function(Value)
+        -- Auto Farm Logic
     end,
 })
 
--- **Keybind für schnelle Aktionen**
-MainTab:CreateKeybind({
-    Name = "Quick Script Execute",
-    CurrentKeybind = Enum.KeyCode.F,
+local Slider = MainTab:CreateSlider({
+    Name = "Walk Speed",
+    Range = {16, 500},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Flag = "SpeedSlider",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end,
+})
+
+local Dropdown = MainTab:CreateDropdown({
+    Name = "Teleport Location",
+    Options = {"Spawn", "Shop", "Farm Area", "Boss Room"},
+    CurrentOption = "Spawn",
+    Flag = "TeleportDropdown",
+    Callback = function(Option)
+        -- Teleport Logic
+    end,
+})
+
+-- Keybind System
+local Keybind = MainTab:CreateKeybind({
+    Name = "Toggle GUI",
+    CurrentKeybind = "RightControl",
     HoldToInteract = false,
+    Flag = "ToggleGuiKeybind",
     Callback = function()
-        local success, errorMessage = pcall(function()
-            game:GetService("ReplicatedStorage").AddCheese:FireServer()
-        end)
-
-        if success then
-            print("Cheese Script executed via Keybind!")
-        else
-            print("Keybind execution error:", errorMessage)
-        end
+        -- Toggle GUI Logic
     end,
 })
 
--- **Tab 2: Theme-Optionen**
-local ThemeTab = Window:CreateTab("Themes", 4483362458)
+-- Settings Tab
+local ColorPicker = SettingsTab:CreateColorPicker({
+    Name = "UI Color",
+    Color = Color3.fromRGB(0, 170, 255),
+    Flag = "UIColor",
+    Callback = function(Color)
+        -- Change UI Color Logic
+    end
+})
 
--- **Theme-Wechsler**
-ThemeTab:CreateDropdown({
-    Name = "Pick a Theme",
-    Options = {"Default", "Ocean", "Serenity", "AmberGlow", "Amethyst"},
-    CurrentOption = "Ocean",
-    Callback = function(Theme)
-        Window:SetTheme(Theme)
+-- Paragraph mit wichtigen Informationen
+CreditsTab:CreateParagraph({
+    Title = "Script Information",
+    Content = "Created by: YourName\nVersion: 1.0\nLast Updated: "..os.date("%d/%m/%Y")
+})
+
+-- Button mit Notification
+local Button = CreditsTab:CreateButton({
+    Name = "Copy Discord",
+    Callback = function()
+        setclipboard("discord.gg/YourServer")
         Rayfield:Notify({
-            Title = "Theme Change",
-            Content = "Theme updated to: " .. Theme,
-            Duration = 3
+            Title = "Discord Copied",
+            Content = "Discord invite has been copied to clipboard!",
+            Duration = 3,
+            Image = 4483362458
         })
     end,
 })
 
--- **Info-Paragraph**
-ThemeTab:CreateParagraph({
-    Title = "About",
-    Content = "This GUI showcases the ultimate features of Rayfield. Customize your experience and enjoy the versatility."
+-- Section für gruppierte Elemente
+local Section = MainTab:CreateSection("Advanced Settings")
+
+-- Input field
+local Input = MainTab:CreateInput({
+    Name = "Custom Value",
+    PlaceholderText = "Enter value here",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        -- Input Logic
+    end,
 })
-
--- **Tab 3: Informationen und Credits**
-local InfoTab = Window:CreateTab("Information", 4483362458)
-
--- **Credits anzeigen**
-InfoTab:CreateLabel("Created by Souhail")
-InfoTab:CreateParagraph({
-    Title = "Special Thanks",
-    Content = "Thanks to the Rayfield Library for making this advanced GUI possible."
-})
-
--- **Lade gespeicherte Einstellungen**
-Rayfield:LoadConfiguration()
-
