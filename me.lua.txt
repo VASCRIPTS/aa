@@ -1,53 +1,43 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Fenster erstellen
+-- Hauptfenster erstellen
 local Window = Rayfield:CreateWindow({
-    Name = "High-Class GUI",
-    LoadingTitle = "High-Class Interface",
-    LoadingSubtitle = "Initializing the best experience...",
+    Name = "Wow Effect Hub",
+    LoadingTitle = "Loading Ultimate Experience",
+    LoadingSubtitle = "Please wait while we prepare...",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "RayfieldProjects",
-        FileName = "HighClassUI"
+        FolderName = "UltimateGUI", -- Ordner für gespeicherte Konfigurationen
+        FileName = "WowHubConfig"
     },
     Discord = {
         Enabled = true,
-        Invite = "example", -- Füge hier eine Discord-Einladung hinzu
+        Invite = "example", -- Hier deine Discord-Einladung einfügen
         RememberJoins = true
     },
-    Theme = "DarkBlue", -- Nutze ein passendes Theme (siehe Dokumentation)
+    Theme = "Serenity", -- Voreingestelltes Theme
     KeySystem = true,
     KeySettings = {
-        Title = "Enter Your Key",
-        Subtitle = "Access required to use this GUI",
-        Note = "Contact support for access keys.",
-        Key = "12345-ExampleKey" -- Ersetze dies mit deinem Schlüssel
+        Title = "Authentication Required",
+        Subtitle = "Enter your access key to proceed.",
+        Note = "Contact support if you don't have a key.",
+        Key = "Your-Access-Key" -- Zugangsschlüssel einstellen
     }
 })
 
--- Haupt-Tab erstellen
-local MainTab = Window:CreateTab("Dashboard", 4483362458)
+-- Erster Tab: Hauptmenü
+local MainTab = Window:CreateTab("Main Menu", 4483362458) -- Benutzerdefinierte Icon-ID
 
--- Label hinzufügen
-MainTab:CreateLabel("Welcome to the High-Class GUI")
+-- Einführungstext
+MainTab:CreateLabel("Welcome to the Wow Effect Hub!")
 
--- Benachrichtigungsschaltfläche
+-- Script ausführen
 MainTab:CreateButton({
-    Name = "Show Welcome Notification",
+    Name = "Execute Cheese Script",
     Callback = function()
-        Rayfield:Notify({
-            Title = "Welcome!",
-            Content = "You have successfully opened the GUI.",
-            Duration = 5,
-            Actions = {
-                Close = {
-                    Name = "Close",
-                    Callback = function()
-                        print("Notification closed.")
-                    end
-                }
-            }
-        })
+        -- Dein gewünschtes Script
+        game:GetService("ReplicatedStorage").AddCheese:FireServer()
+        print("Script executed successfully.")
     end,
 })
 
@@ -55,7 +45,7 @@ MainTab:CreateButton({
 MainTab:CreateSlider({
     Name = "Adjust Volume",
     Range = {0, 100},
-    Increment = 10,
+    Increment = 5,
     Suffix = "%",
     CurrentValue = 50,
     Callback = function(Value)
@@ -63,72 +53,47 @@ MainTab:CreateSlider({
     end,
 })
 
--- Farbwähler
-MainTab:CreateColorPicker({
-    Name = "Pick a Theme Color",
-    Color = Color3.fromRGB(0, 255, 255),
-    Callback = function(Color)
-        print("New color selected:", Color)
-    end,
-})
-
--- Dropdown-Menü
+-- Dropdown für Modi
 MainTab:CreateDropdown({
     Name = "Select Mode",
-    Options = {"Mode 1", "Mode 2", "Mode 3"},
-    CurrentOption = "Mode 1",
+    Options = {"Stealth", "Combat", "Explorer"},
+    CurrentOption = "Stealth",
     Callback = function(Option)
-        print("Selected Mode:", Option)
+        print("Mode selected:", Option)
     end,
 })
 
--- Eingabefeld
-MainTab:CreateInput({
-    Name = "Custom Command",
-    PlaceholderText = "Type here...",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        print("Command entered:", Text)
-    end,
-})
+-- Zweiter Tab: Design und Themes
+local DesignTab = Window:CreateTab("Design & Themes", 4483362458)
 
--- Schalter (Toggle)
-MainTab:CreateToggle({
-    Name = "Activate Feature",
-    CurrentValue = false,
-    Callback = function(State)
-        print("Feature activated:", State)
-    end,
-})
-
--- Keybind
-MainTab:CreateKeybind({
-    Name = "Quick Action Keybind",
-    CurrentKeybind = Enum.KeyCode.F,
-    HoldToInteract = false,
-    Callback = function()
-        print("Keybind activated!")
-    end,
-})
-
--- Paragraf hinzufügen
-MainTab:CreateParagraph({
-    Title = "Information",
-    Content = "This GUI demonstrates the full potential of the Rayfield library. Explore and customize!"
-})
-
--- Zusätzlicher Tab für Themes
-local ThemeTab = Window:CreateTab("Themes", 4483362458)
-ThemeTab:CreateLabel("Change the GUI Theme")
-ThemeTab:CreateDropdown({
-    Name = "Select Theme",
+-- Theme-Wechsler
+DesignTab:CreateDropdown({
+    Name = "Pick a Theme",
     Options = {"Default", "AmberGlow", "Amethyst", "Ocean", "Serenity"},
-    CurrentOption = "DarkBlue",
+    CurrentOption = "Serenity",
     Callback = function(Theme)
-        Window:ModifyTheme(Theme)
+        Window:SetTheme(Theme)
         print("Theme changed to:", Theme)
     end,
 })
 
--- Tabs und Fenster laden
+-- Farbwähler mit Animation
+DesignTab:CreateColorPicker({
+    Name = "Customize Accent Color",
+    Color = Color3.fromRGB(0, 255, 255),
+    Callback = function(Color)
+        Window:ModifyTheme({
+            Accent = Color
+        })
+        print("Accent color changed:", Color)
+    end,
+})
+
+-- Paragraf mit Infos
+DesignTab:CreateParagraph({
+    Title = "About This GUI",
+    Content = "This GUI showcases the ultimate potential of Rayfield with full features and an impressive design."
+})
+
+-- Tabs laden und Konfiguration speichern
 Rayfield:LoadConfiguration()
