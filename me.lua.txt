@@ -1,6 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
--- Window Konfiguration
+-- Fenster-Konfiguration
 local Window = Rayfield:CreateWindow({
     Name = "Premium Script Hub",
     LoadingTitle = "Loading Interface...",
@@ -15,19 +15,12 @@ local Window = Rayfield:CreateWindow({
         Title = "Key System",
         Subtitle = "Enter Key to Access",
         Note = "Join Discord for key",
-        Key = "PREMIUM-KEY-123"
+        Key = "YOUR_KEY_HERE"
     },
     Discord = {
         Enabled = true,
         Invite = "discord.gg/YourServer",
         RememberJoins = true
-    },
-    Theme = {
-        Main = Color3.fromRGB(35, 35, 35),
-        Second = Color3.fromRGB(25, 25, 25),
-        Stroke = Color3.fromRGB(50, 50, 50),
-        Accent = Color3.fromRGB(0, 170, 255),
-        TextColor = Color3.fromRGB(255, 255, 255)
     }
 })
 
@@ -35,19 +28,19 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Main", 4483362458)
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 local CreditsTab = Window:CreateTab("Credits", 4483362458)
-local AnimationsTab = Window:CreateTab("Animations", 4483362458)
 
--- Main Tab Elemente
-local ToggleButton = MainTab:CreateToggle({
+-- Haupt-Tab-Elemente
+MainTab:CreateToggle({
     Name = "Auto Farm",
     CurrentValue = false,
     Flag = "AutoFarmToggle",
     Callback = function(Value)
-        -- Auto Farm Logic
+        -- Logik für Auto Farm
+        print("Auto Farm ist jetzt: " .. tostring(Value))
     end,
 })
 
-local Slider = MainTab:CreateSlider({
+MainTab:CreateSlider({
     Name = "Walk Speed",
     Range = {16, 500},
     Increment = 1,
@@ -59,84 +52,40 @@ local Slider = MainTab:CreateSlider({
     end,
 })
 
-local Dropdown = MainTab:CreateButton({
-    Name = "Teleport to Spawn",
-    Callback = function()
-        -- Teleport Logic
-    end,
-})
-
--- Settings Tab
-local ColorPicker = SettingsTab:CreateColorPicker({
-    Name = "UI Color",
+-- Einstellungen-Tab
+SettingsTab:CreateColorPicker({
+    Name = "UI Farbe",
     Color = Color3.fromRGB(0, 170, 255),
     Flag = "UIColor",
     Callback = function(Color)
-        -- Change UI Color Logic
+        -- Logik um die UI-Farbe zu ändern
+        print("UI Farbe geändert zu: ", Color)
     end
 })
 
-local Dropdown = SettingsTab:CreateDropdown({
-    Name = "Notification Sound",
-    Options = {"Sound 1", "Sound 2", "Sound 3"},
-    CurrentOption = "Sound 1",
-    Flag = "NotificationSound",
-    Callback = function(Option)
-        -- Change Notification Sound Logic
-    end,
+-- Credits-Tab
+CreditsTab:CreateParagraph({
+    Title = "Script Informationen",
+    Content = "Erstellt von: YourName\nVersion: 1.0\nLetzte Aktualisierung: " .. os.date("%d/%m/%Y")
 })
 
--- Credits Tab
-local CreditsButton = CreditsTab:CreateButton({
-    Name = "Copy Discord",
+CreditsTab:CreateButton({
+    Name = "Discord Kopieren",
     Callback = function()
         setclipboard("discord.gg/YourServer")
         Rayfield:Notify({
-            Title = "Discord Copied",
-            Content = "Discord invite has been copied to clipboard!",
+            Title = "Discord Kopiert",
+            Content = "Discord einladungslink wurde in die Zwischenablage kopiert!",
             Duration = 3,
             Image = 4483362458
         })
     end,
 })
 
--- Animations Tab
-local AnimationButton = AnimationsTab:CreateButton({
-    Name = "Play Animation",
-    Callback = function()
-        -- Play Animation Logic
-    end,
-})
-
-local AnimationSlider = AnimationsTab:CreateSlider({
-    Name = "Animation Speed",
-    Range = {0.1, 10},
-    Increment = 0.1,
-    Suffix = "Speed",
-    CurrentValue = 1,
-    Flag = "AnimationSpeed",
-    Callback = function(Value)
-        -- Change Animation Speed Logic
-    end,
-})
-
--- Section für gruppierte Elemente
-local Section = MainTab:CreateSection("Advanced Settings")
-
--- Input field
-local Input = MainTab:CreateInput({
-    Name = "Custom Value",
-    PlaceholderText = "Enter value here",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        -- Input Logic
-    end,
-})
-
--- Notify Funktion
+-- Benachrichtigung beim Laden
 Rayfield:Notify({
-    Title = "Script Loaded",
-    Content = "The script has been loaded successfully!",
+    Title = "Script geladen",
+    Content = "Das Skript wurde erfolgreich geladen!",
     Duration = 3,
     Image = 4483362458
 })
