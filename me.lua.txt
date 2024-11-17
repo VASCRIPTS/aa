@@ -22,7 +22,7 @@ local Window = Rayfield:CreateWindow({
         Title = "Access Key Required",
         Subtitle = "Please enter your key to proceed.",
         Note = "If you don't have a key, contact support.",
-        Key = "Your-Key-Here" -- Ersetze mit deinem Schlüssel
+        Key = "123" -- Ersetze mit deinem Schlüssel
     }
 })
 
