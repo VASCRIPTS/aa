@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
--- Window Konfiguration mit Custom Theme
+-- Window Konfiguration
 local Window = Rayfield:CreateWindow({
-    Name = "Premium Script v1.0",
+    Name = "Premium Script Hub",
     LoadingTitle = "Loading Interface...",
     LoadingSubtitle = "by YourName",
     ConfigurationSaving = {
@@ -21,11 +21,7 @@ local Window = Rayfield:CreateWindow({
         Enabled = true,
         Invite = "discord.gg/YourServer",
         RememberJoins = true
-    }
-})
-
--- Custom Theme
-Rayfield:LoadConfiguration({
+    },
     Theme = {
         Main = Color3.fromRGB(35, 35, 35),
         Second = Color3.fromRGB(25, 25, 25),
@@ -39,6 +35,7 @@ Rayfield:LoadConfiguration({
 local MainTab = Window:CreateTab("Main", 4483362458)
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 local CreditsTab = Window:CreateTab("Credits", 4483362458)
+local AnimationsTab = Window:CreateTab("Animations", 4483362458)
 
 -- Main Tab Elemente
 local ToggleButton = MainTab:CreateToggle({
@@ -62,24 +59,10 @@ local Slider = MainTab:CreateSlider({
     end,
 })
 
-local Dropdown = MainTab:CreateDropdown({
-    Name = "Teleport Location",
-    Options = {"Spawn", "Shop", "Farm Area", "Boss Room"},
-    CurrentOption = "Spawn",
-    Flag = "TeleportDropdown",
-    Callback = function(Option)
-        -- Teleport Logic
-    end,
-})
-
--- Keybind System
-local Keybind = MainTab:CreateKeybind({
-    Name = "Toggle GUI",
-    CurrentKeybind = "RightControl",
-    HoldToInteract = false,
-    Flag = "ToggleGuiKeybind",
+local Dropdown = MainTab:CreateButton({
+    Name = "Teleport to Spawn",
     Callback = function()
-        -- Toggle GUI Logic
+        -- Teleport Logic
     end,
 })
 
@@ -93,14 +76,18 @@ local ColorPicker = SettingsTab:CreateColorPicker({
     end
 })
 
--- Paragraph mit wichtigen Informationen
-CreditsTab:CreateParagraph({
-    Title = "Script Information",
-    Content = "Created by: YourName\nVersion: 1.0\nLast Updated: "..os.date("%d/%m/%Y")
+local Dropdown = SettingsTab:CreateDropdown({
+    Name = "Notification Sound",
+    Options = {"Sound 1", "Sound 2", "Sound 3"},
+    CurrentOption = "Sound 1",
+    Flag = "NotificationSound",
+    Callback = function(Option)
+        -- Change Notification Sound Logic
+    end,
 })
 
--- Button mit Notification
-local Button = CreditsTab:CreateButton({
+-- Credits Tab
+local CreditsButton = CreditsTab:CreateButton({
     Name = "Copy Discord",
     Callback = function()
         setclipboard("discord.gg/YourServer")
@@ -110,6 +97,26 @@ local Button = CreditsTab:CreateButton({
             Duration = 3,
             Image = 4483362458
         })
+    end,
+})
+
+-- Animations Tab
+local AnimationButton = AnimationsTab:CreateButton({
+    Name = "Play Animation",
+    Callback = function()
+        -- Play Animation Logic
+    end,
+})
+
+local AnimationSlider = AnimationsTab:CreateSlider({
+    Name = "Animation Speed",
+    Range = {0.1, 10},
+    Increment = 0.1,
+    Suffix = "Speed",
+    CurrentValue = 1,
+    Flag = "AnimationSpeed",
+    Callback = function(Value)
+        -- Change Animation Speed Logic
     end,
 })
 
@@ -124,4 +131,12 @@ local Input = MainTab:CreateInput({
     Callback = function(Text)
         -- Input Logic
     end,
+})
+
+-- Notify Funktion
+Rayfield:Notify({
+    Title = "Script Loaded",
+    Content = "The script has been loaded successfully!",
+    Duration = 3,
+    Image = 4483362458
 })
