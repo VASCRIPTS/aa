@@ -17,7 +17,7 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
     Theme = "Ocean", -- Standard-Theme
-    KeySystem = true, -- Aktiviere den Key-System-Schutz
+    KeySystem = false, -- Aktiviere den Key-System-Schutz
     KeySettings = {
         Title = "Access Key Required",
         Subtitle = "Please enter your key to proceed.",
