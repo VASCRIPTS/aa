@@ -1,0 +1,88 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Professionelles GUI",
+    LoadingTitle = "Lade GUI...",
+    LoadingSubtitle = "Bitte warten",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "GUI_Configs"
+    }
+})
+
+local Tab = Window:CreateTab("Hauptmenü", 4483362458)
+local Section = Tab:CreateSection("Automatisierung")
+
+-- Variablen für Auto-Fire Toggle
+local AutoFire = false
+local AutoFireConnection
+
+Tab:CreateToggle({
+    Name = "Auto-Fire Enemies",
+    CurrentValue = false,
+    Callback = function(Value)
+        AutoFire = Value
+        if AutoFire then
+            AutoFireConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                local args = {
+                    [1] = "Enemies",
+                    [2] = "World",
+                    [3] = "Click"
+                }
+                game:GetService("ReplicatedStorage").Remotes.Bridge:FireServer(unpack(args))
+            end)
+        else
+            if AutoFireConnection then
+                AutoFireConnection:Disconnect()
+                AutoFireConnection = nil
+            end
+        end
+    end
+})
+
+-- Variablen für Open Star Toggle
+local AutoOpenStar = false
+local OpenStarConnection
+
+Tab:CreateToggle({
+    Name = "Open Star",
+    CurrentValue = false,
+    Callback = function(Value)
+        AutoOpenStar = Value
+        if AutoOpenStar then
+            OpenStarConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                task.wait(1) -- Pause zwischen Ausführungen
+                local args = {
+                    [1] = "General",
+                    [2] = "Stars",
+                    [3] = "Open",
+                    [4] = "Leaf Village",
+                    [5] = "Coins"
+                }
+                game:GetService("ReplicatedStorage").Remotes.Bridge:FireServer(unpack(args))
+            end)
+        else
+            if OpenStarConnection then
+                OpenStarConnection:Disconnect()
+                OpenStarConnection = nil
+            end
+        end
+    end
+})
+
+-- Button zum Unloaden des Scripts
+Tab:CreateButton({
+    Name = "Unload Script",
+    Callback = function()
+        if AutoFireConnection then
+            AutoFireConnection:Disconnect()
+            AutoFireConnection = nil
+        end
+        if OpenStarConnection then
+            OpenStarConnection:Disconnect()
+            OpenStarConnection = nil
+        end
+        Rayfield:Destroy() -- Beendet das GUI
+        print("Script wurde entladen!")
+    end
+})
