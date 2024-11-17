@@ -1,95 +1,134 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Fenster erstellen
 local Window = Rayfield:CreateWindow({
-    Name = "Professionelles GUI",
-    LoadingTitle = "Lade GUI...",
-    LoadingSubtitle = "Bitte warten",
+    Name = "High-Class GUI",
+    LoadingTitle = "High-Class Interface",
+    LoadingSubtitle = "Initializing the best experience...",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "GUI_Configs"
+        FolderName = "RayfieldProjects",
+        FileName = "HighClassUI"
+    },
+    Discord = {
+        Enabled = true,
+        Invite = "example", -- Füge hier eine Discord-Einladung hinzu
+        RememberJoins = true
+    },
+    Theme = "DarkBlue", -- Nutze ein passendes Theme (siehe Dokumentation)
+    KeySystem = true,
+    KeySettings = {
+        Title = "Enter Your Key",
+        Subtitle = "Access required to use this GUI",
+        Note = "Contact support for access keys.",
+        Key = "12345-ExampleKey" -- Ersetze dies mit deinem Schlüssel
     }
 })
 
-local Tab = Window:CreateTab("Hauptmenü", 4483362458)
-local Section = Tab:CreateSection("Automatisierung")
+-- Haupt-Tab erstellen
+local MainTab = Window:CreateTab("Dashboard", 4483362458)
 
--- Variablen für Auto-Fire Toggle
-local AutoFire = false
-local AutoFireConnection
+-- Label hinzufügen
+MainTab:CreateLabel("Welcome to the High-Class GUI")
 
-Tab:CreateToggle({
-    Name = "Auto-Fire Enemies",
-    CurrentValue = false,
-    Callback = function(Value)
-        AutoFire = Value
-        if AutoFire then
-            AutoFireConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                local args = {
-                    [1] = "Enemies",
-                    [2] = "World",
-                    [3] = "Click"
-                }
-                game:GetService("ReplicatedStorage").Remotes.Bridge:FireServer(unpack(args))
-            end)
-        else
-            if AutoFireConnection then
-                AutoFireConnection:Disconnect()
-                AutoFireConnection = nil
-            end
-        end
-    end
-})
-
--- Variablen für Open Star Toggle
-local AutoOpenStar = false
-local OpenStarConnection
-
-Tab:CreateToggle({
-    Name = "Open Star",
-    CurrentValue = false,
-    Callback = function(Value)
-        AutoOpenStar = Value
-        if AutoOpenStar then
-            OpenStarConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                -- Spieler teleportieren
-                local player = game.Players.LocalPlayer
-                if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    player.Character.HumanoidRootPart.CFrame = CFrame.new(66, 11, -184)
-                end
-                
-                -- Sterne öffnen
-                task.wait(1) -- Pause zwischen den Aktionen
-                local args = {
-                    [1] = "General",
-                    [2] = "Stars",
-                    [3] = "Open",
-                    [4] = "Leaf Village",
-                    [5] = "Coins"
-                }
-                game:GetService("ReplicatedStorage").Remotes.Bridge:FireServer(unpack(args))
-            end)
-        else
-            if OpenStarConnection then
-                OpenStarConnection:Disconnect()
-                OpenStarConnection = nil
-            end
-        end
-    end
-})
-
--- Button zum Unloaden des Scripts
-Tab:CreateButton({
-    Name = "Unload Script",
+-- Benachrichtigungsschaltfläche
+MainTab:CreateButton({
+    Name = "Show Welcome Notification",
     Callback = function()
-        if AutoFireConnection then
-            AutoFireConnection:Disconnect()
-            AutoFireConnection = nil
-        end
-        if OpenStarConnection then
-            OpenStarConnection:Disconnect()
-            OpenStarConnection = nil
-        end
-        Rayfield:Destroy() -- Beendet das GUI
-        print("Script wurde entladen!")
-    end
+        Rayfield:Notify({
+            Title = "Welcome!",
+            Content = "You have successfully opened the GUI.",
+            Duration = 5,
+            Actions = {
+                Close = {
+                    Name = "Close",
+                    Callback = function()
+                        print("Notification closed.")
+                    end
+                }
+            }
+        })
+    end,
 })
+
+-- Slider für Lautstärke
+MainTab:CreateSlider({
+    Name = "Adjust Volume",
+    Range = {0, 100},
+    Increment = 10,
+    Suffix = "%",
+    CurrentValue = 50,
+    Callback = function(Value)
+        print("Volume set to:", Value)
+    end,
+})
+
+-- Farbwähler
+MainTab:CreateColorPicker({
+    Name = "Pick a Theme Color",
+    Color = Color3.fromRGB(0, 255, 255),
+    Callback = function(Color)
+        print("New color selected:", Color)
+    end,
+})
+
+-- Dropdown-Menü
+MainTab:CreateDropdown({
+    Name = "Select Mode",
+    Options = {"Mode 1", "Mode 2", "Mode 3"},
+    CurrentOption = "Mode 1",
+    Callback = function(Option)
+        print("Selected Mode:", Option)
+    end,
+})
+
+-- Eingabefeld
+MainTab:CreateInput({
+    Name = "Custom Command",
+    PlaceholderText = "Type here...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        print("Command entered:", Text)
+    end,
+})
+
+-- Schalter (Toggle)
+MainTab:CreateToggle({
+    Name = "Activate Feature",
+    CurrentValue = false,
+    Callback = function(State)
+        print("Feature activated:", State)
+    end,
+})
+
+-- Keybind
+MainTab:CreateKeybind({
+    Name = "Quick Action Keybind",
+    CurrentKeybind = Enum.KeyCode.F,
+    HoldToInteract = false,
+    Callback = function()
+        print("Keybind activated!")
+    end,
+})
+
+-- Paragraf hinzufügen
+MainTab:CreateParagraph({
+    Title = "Information",
+    Content = "This GUI demonstrates the full potential of the Rayfield library. Explore and customize!"
+})
+
+-- Zusätzlicher Tab für Themes
+local ThemeTab = Window:CreateTab("Themes", 4483362458)
+ThemeTab:CreateLabel("Change the GUI Theme")
+ThemeTab:CreateDropdown({
+    Name = "Select Theme",
+    Options = {"Default", "AmberGlow", "Amethyst", "Ocean", "Serenity"},
+    CurrentOption = "DarkBlue",
+    Callback = function(Theme)
+        Window:ModifyTheme(Theme)
+        print("Theme changed to:", Theme)
+    end,
+})
+
+-- Tabs und Fenster laden
+Rayfield:LoadConfiguration()
