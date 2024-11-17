@@ -51,7 +51,14 @@ Tab:CreateToggle({
         AutoOpenStar = Value
         if AutoOpenStar then
             OpenStarConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                task.wait(1) -- Pause zwischen Ausführungen
+                -- Spieler teleportieren
+                local player = game.Players.LocalPlayer
+                if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(66, 11, -184)
+                end
+                
+                -- Sterne öffnen
+                task.wait(1) -- Pause zwischen den Aktionen
                 local args = {
                     [1] = "General",
                     [2] = "Stars",
