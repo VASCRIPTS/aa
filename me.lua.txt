@@ -1,51 +1,69 @@
+-- Lade die Rayfield-Bibliothek
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Hauptfenster erstellen
+-- Erstelle das Hauptfenster mit erweiterten Optionen
 local Window = Rayfield:CreateWindow({
-    Name = "Wow Effect Hub",
-    LoadingTitle = "Loading Ultimate Experience",
-    LoadingSubtitle = "Please wait while we prepare...",
+    Name = "Ultimate Script Hub",
+    LoadingTitle = "Loading Advanced Interface",
+    LoadingSubtitle = "Please wait, initializing features...",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "UltimateGUI", -- Ordner für gespeicherte Konfigurationen
-        FileName = "WowHubConfig"
+        FolderName = "AdvancedGUI", -- Speicherort für Einstellungen
+        FileName = "ScriptHubConfig"
     },
     Discord = {
         Enabled = true,
-        Invite = "example", -- Hier deine Discord-Einladung einfügen
+        Invite = "your-invite-code", -- Füge hier eine Discord-Einladung ein
         RememberJoins = true
     },
-    Theme = "Serenity", -- Voreingestelltes Theme
-    KeySystem = true,
+    Theme = "Ocean", -- Standard-Theme
+    KeySystem = true, -- Aktiviere den Key-System-Schutz
     KeySettings = {
-        Title = "Authentication Required",
-        Subtitle = "Enter your access key to proceed.",
-        Note = "Contact support if you don't have a key.",
-        Key = "Your-Access-Key" -- Zugangsschlüssel einstellen
+        Title = "Access Key Required",
+        Subtitle = "Please enter your key to proceed.",
+        Note = "If you don't have a key, contact support.",
+        Key = "Your-Key-Here" -- Ersetze mit deinem Schlüssel
     }
 })
 
--- Erster Tab: Hauptmenü
-local MainTab = Window:CreateTab("Main Menu", 4483362458) -- Benutzerdefinierte Icon-ID
+-- **Tab 1: Hauptfunktionen**
+local MainTab = Window:CreateTab("Script Hub", 4483362458)
 
--- Einführungstext
-MainTab:CreateLabel("Welcome to the Wow Effect Hub!")
-
--- Script ausführen
+-- **Script-Button: Führt dein Script aus**
 MainTab:CreateButton({
     Name = "Execute Cheese Script",
     Callback = function()
-        -- Dein gewünschtes Script
-        game:GetService("ReplicatedStorage").AddCheese:FireServer()
-        print("Script executed successfully.")
+        local success, errorMessage = pcall(function()
+            game:GetService("ReplicatedStorage").AddCheese:FireServer()
+        end)
+
+        if success then
+            Rayfield:Notify({
+                Title = "Script Execution",
+                Content = "Cheese Script executed successfully!",
+                Duration = 5,
+                Actions = {
+                    Close = { Name = "OK", Callback = function() end }
+                }
+            })
+        else
+            Rayfield:Notify({
+                Title = "Execution Error",
+                Content = "Failed to execute Cheese Script: " .. errorMessage,
+                Duration = 5,
+                Actions = {
+                    Close = { Name = "OK", Callback = function() end }
+                }
+            })
+        end
     end,
 })
 
--- Slider für Lautstärke
+-- **Slider zur Lautstärkeanpassung**
 MainTab:CreateSlider({
     Name = "Adjust Volume",
     Range = {0, 100},
-    Increment = 5,
+    Increment = 1,
     Suffix = "%",
     CurrentValue = 50,
     Callback = function(Value)
@@ -53,7 +71,21 @@ MainTab:CreateSlider({
     end,
 })
 
--- Dropdown für Modi
+-- **Farbwähler mit Akzentänderung**
+MainTab:CreateColorPicker({
+    Name = "Change Accent Color",
+    Color = Color3.fromRGB(0, 255, 255), -- Standardfarbe
+    Callback = function(Color)
+        Window:ModifyTheme({ Accent = Color })
+        Rayfield:Notify({
+            Title = "Theme Update",
+            Content = "Accent color updated!",
+            Duration = 3
+        })
+    end,
+})
+
+-- **Dropdown für Modi**
 MainTab:CreateDropdown({
     Name = "Select Mode",
     Options = {"Stealth", "Combat", "Explorer"},
@@ -63,37 +95,67 @@ MainTab:CreateDropdown({
     end,
 })
 
--- Zweiter Tab: Design und Themes
-local DesignTab = Window:CreateTab("Design & Themes", 4483362458)
+-- **Toggle zur Aktivierung von Features**
+MainTab:CreateToggle({
+    Name = "Activate Stealth Mode",
+    CurrentValue = false,
+    Callback = function(State)
+        print("Stealth Mode Active:", State)
+    end,
+})
 
--- Theme-Wechsler
-DesignTab:CreateDropdown({
+-- **Keybind für schnelle Aktionen**
+MainTab:CreateKeybind({
+    Name = "Quick Script Execute",
+    CurrentKeybind = Enum.KeyCode.F,
+    HoldToInteract = false,
+    Callback = function()
+        local success, errorMessage = pcall(function()
+            game:GetService("ReplicatedStorage").AddCheese:FireServer()
+        end)
+
+        if success then
+            print("Cheese Script executed via Keybind!")
+        else
+            print("Keybind execution error:", errorMessage)
+        end
+    end,
+})
+
+-- **Tab 2: Theme-Optionen**
+local ThemeTab = Window:CreateTab("Themes", 4483362458)
+
+-- **Theme-Wechsler**
+ThemeTab:CreateDropdown({
     Name = "Pick a Theme",
-    Options = {"Default", "AmberGlow", "Amethyst", "Ocean", "Serenity"},
-    CurrentOption = "Serenity",
+    Options = {"Default", "Ocean", "Serenity", "AmberGlow", "Amethyst"},
+    CurrentOption = "Ocean",
     Callback = function(Theme)
         Window:SetTheme(Theme)
-        print("Theme changed to:", Theme)
-    end,
-})
-
--- Farbwähler mit Animation
-DesignTab:CreateColorPicker({
-    Name = "Customize Accent Color",
-    Color = Color3.fromRGB(0, 255, 255),
-    Callback = function(Color)
-        Window:ModifyTheme({
-            Accent = Color
+        Rayfield:Notify({
+            Title = "Theme Change",
+            Content = "Theme updated to: " .. Theme,
+            Duration = 3
         })
-        print("Accent color changed:", Color)
     end,
 })
 
--- Paragraf mit Infos
-DesignTab:CreateParagraph({
-    Title = "About This GUI",
-    Content = "This GUI showcases the ultimate potential of Rayfield with full features and an impressive design."
+-- **Info-Paragraph**
+ThemeTab:CreateParagraph({
+    Title = "About",
+    Content = "This GUI showcases the ultimate features of Rayfield. Customize your experience and enjoy the versatility."
 })
 
--- Tabs laden und Konfiguration speichern
+-- **Tab 3: Informationen und Credits**
+local InfoTab = Window:CreateTab("Information", 4483362458)
+
+-- **Credits anzeigen**
+InfoTab:CreateLabel("Created by Souhail")
+InfoTab:CreateParagraph({
+    Title = "Special Thanks",
+    Content = "Thanks to the Rayfield Library for making this advanced GUI possible."
+})
+
+-- **Lade gespeicherte Einstellungen**
 Rayfield:LoadConfiguration()
+
